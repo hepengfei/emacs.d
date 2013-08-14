@@ -1,0 +1,10 @@
+;;;; Emacs Bookmark Format Version 1 ;;;;
+;;; This format is meant to be slightly human-readable;
+;;; nevertheless, you probably don't want to edit it.
+;;; -*- End Of Bookmark File Format Version Stamp -*-
+(("Workspace"
+ (filename . "~/Workspace/")
+ (front-context-string . "Workspace:\n  总用量")
+ (rear-context-string . "/home/hepengfei/")
+ (position . 19))
+)

@@ -1,0 +1,11 @@
+auto-save-list
+backups
+session.*
+tramp
+eshell/history
+eshell/lastdir
+image-dired
+places
+%backup%*
+*~
+*.elc

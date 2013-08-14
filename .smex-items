@@ -1,0 +1,57 @@
+
+;; ----- smex-history -----
+(
+ shell
+ windmove-default-keybindings
+ ansi-term
+ info
+ xterm-mouse-mode
+ menu-bar-mode
+ term
+)
+
+;; ----- smex-data -----
+(
+ (shell . 158)
+ (set-mark-command . 3)
+ (calendar . 7)
+ (comment-region . 5)
+ (eval-buffer . 7)
+ (info . 6)
+ (menu-bar-mode . 6)
+ (man . 27)
+ (grep . 30)
+ (recover-session . 1)
+ (auto-fill-mode . 1)
+ (vc-update-change-log . 1)
+ (eshell . 6)
+ (org-mode . 1)
+ (version . 1)
+ (vc-dir . 1)
+ (vc-annotate . 1)
+ (diff . 1)
+ (ediff-buffers . 2)
+ (calc . 2)
+ (python-mode . 1)
+ (run-python . 3)
+ (awk-mode . 1)
+ (message-mode . 2)
+ (sql-mysql . 1)
+ (eval-region . 1)
+ (magit-status . 6)
+ (compile . 17)
+ (c++-mode . 1)
+ (uncomment-region . 1)
+ (gdb . 5)
+ (hexl-find-file . 2)
+ (ediff . 1)
+ (hexl-mode . 2)
+ (magit-push . 3)
+ (rename-buffer . 1)
+ (terminal-emulator . 1)
+ (winner-mode . 1)
+ (term . 1)
+ (xterm-mouse-mode . 1)
+ (ansi-term . 2)
+ (windmove-default-keybindings . 1)
+)
