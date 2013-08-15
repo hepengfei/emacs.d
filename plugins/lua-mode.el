@@ -116,7 +116,7 @@
     (if (fboundp 'cl-assert) 'cl-assert 'assert))
 
   (defalias 'lua--cl-labels
-    (if (fboundp 'cl-labels) 'cl-labels 'flet))
+    (if (fboundp 'cl-labels) 'cl-labels 'cl-flet))
 
   ;; for Emacsen < 22.1
   (defalias 'lua--with-no-warnings

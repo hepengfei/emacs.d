@@ -156,34 +156,6 @@
 ;(set-language-environment 'Chinese-GB))
 (setq default-input-method "chinese-wubi")
 
-
-;; 
-;; 字体设置
-;; 
-(if window-system
-    (if (string= system-type "windows-nt")
-        ;; windows下的配置
-        (progn
-          (set-frame-font "Consolas-14")
-          ;;(set-frame-font "SimSun-12")
-          ;;(set-frame-font "宋体-12")
-          (set-fontset-font (frame-parameter nil 'font)  'han '("Microsoft YaHei" . "unicode-bmp"))
-          (set-fontset-font (frame-parameter nil 'font)  'symbol '("Microsoft YaHei" . "unicode-bmp"))
-          (set-fontset-font (frame-parameter nil 'font)  'cjk-misc '("Microsoft YaHei" . "unicode-bmp"))
-          )
-
-      ;; GNU/Linux下的配置
-      (progn
-        ;; (set-frame-font "文泉驿等宽正黑-14") ; Linux下的默认字体
-        (set-frame-font "Consolas-13")  ; 13号字体能显示两列70个字符，如果显示器更大，则最好用14号字体
-        (set-fontset-font (frame-parameter nil 'font)  'han '("Microsoft YaHei" . "unicode-bmp"))
-        (set-fontset-font (frame-parameter nil 'font)  'symbol '("Microsoft YaHei" . "unicode-bmp"))
-        (set-fontset-font (frame-parameter nil 'font)  'cjk-misc '("Microsoft YaHei" . "unicode-bmp"))
-        )
-      
-      ))
-
-
 (add-to-list 'load-path "~/.emacs.d/plugins")
 (autoload 'lua-mode "lua-mode" "Lua editing mode." t)
 (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
@@ -311,9 +283,10 @@
 
 ;; 设置默认的邮件头，通过FCC指定已发送的邮件放在哪里；多个头字段用\n分
 ;; 隔。参考[[info:Sending Mail:Mail Headers]]
+(setq mail-default-fcc (concat "~/Mail/sent-" (format-time-string "%Y%m" (current-time))))
 (setq mail-default-headers
       (concat
-       "Fcc: ~/Mail/sent-" (format-time-string "%Y%m" (current-time))
+       "Fcc: ~/Mail/sent-" mail-default-fcc
        ;; "\nXXX: xxx" ; 其它头字段
        ))
 
@@ -321,10 +294,6 @@
 ;; (setq smtpmail-starttls-credentials
 ;;       '(("HOSTNAME" "PORT" nil nil)))
 
-
-;; emacs server
-;;(server-force-delete)
-;;(server-start)
 
 
 
@@ -383,14 +352,85 @@
  ;; If there is more than one, they won't work right.
  )
 
-;; 仅在窗口模式下加载此主题；文本模式下不能用
-(if window-system (load-theme 'solarized-dark t))
+
+;; 仅在窗口模式下加载主题；文本模式下不好用
+(defvar frame-color-notset t)            ;避免多次加载
+(defun frame-color-setting ()
+  (if window-system
+      (when frame-color-notset
+          (load-theme 'solarized-dark t)
+          (setq frame-color-notset nil)
+          ))
+  )
+
+;; 字体设置
+(defun frame-font-setting ()
+  (when (eq window-system 'w32)      ;windows下的配置
+    (set-frame-font "Consolas-14")
+    ;;(set-frame-font "SimSun-12")
+    ;;(set-frame-font "宋体-12")
+    (set-fontset-font (frame-parameter nil 'font)  'han '("Microsoft YaHei" . "unicode-bmp"))
+    (set-fontset-font (frame-parameter nil 'font)  'symbol '("Microsoft YaHei" . "unicode-bmp"))
+    (set-fontset-font (frame-parameter nil 'font)  'cjk-misc '("Microsoft YaHei" . "unicode-bmp"))
+    )
+  (when (eq window-system 'x) ;X window下的配置
+    ;; (set-frame-font "文泉驿等宽正黑-14") ; Linux下的默认字体
+    (set-frame-font "Consolas-13")  ; 13号字体能显示两列70个字符，如果
+                                        ; 显示器更大，则最好用14号字体
+    (set-fontset-font (frame-parameter nil 'font)  'han '("Microsoft YaHei" . "unicode-bmp"))
+    (set-fontset-font (frame-parameter nil 'font)  'symbol '("Microsoft YaHei" . "unicode-bmp"))
+    (set-fontset-font (frame-parameter nil 'font)  'cjk-misc '("Microsoft YaHei" . "unicode-bmp"))
+    )
+  )
+
+;; 为使emacsclient启用后，font/color能正常加载
+(add-hook 'after-make-frame-functions
+          (lambda (frame)
+            (with-selected-frame frame
+              (frame-font-setting)
+              (frame-color-setting)
+              ))
+          )
+
+(setq window-system-default-frame-alist
+      '(
+        (x                               ; X window
+         ;(menu-bar-lines . 0)
+         ;(tool-bar-lines . 0)
+         (minibuffer-lines . 1)
+         (width . 90)
+        )
+        (nil                            ; terminal
+         )
+        (w32                            ; windows
+         )
+        (ns                             ; gnustep or Macintosh
+         )
+      ))
+
 
 ;; 可以使用C-c 前后方向键，undo/redo buffer的布局
 (winner-mode)
 
 ;; 可以使用shift+方向键，进行buffer切换
 (windmove-default-keybindings)
+
+
+(add-to-list 'auto-mode-alist '("/mutt" . mail-mode))
+(defun insert-mail-header ()
+  "insert mail header"
+  (interactive)
+;  (mail-to)
+;  (mail-cc)
+;  (mail-fcc mail-default-fcc)
+;  (mail-subject)
+  (insert mail-header-separator "\n")
+  (mail-setup "" "" "" "" "" "" "")
+  )
+
+(defun my-mail-mode-hook ()
+    (global-set-key "\C-ch" 'insert-mail-header))
+;(add-hook 'mail-mode-hook 'my-mail-mode-hook)
 
 ;; Local Variables:
 ;; mode: emacs-lisp
